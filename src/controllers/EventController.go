@@ -1,7 +1,6 @@
 package controller
 
 import(
-	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -29,6 +28,13 @@ func (ec EventController) EventCreate (c *gin.Context) {
 	event.Memo = memo
 	db.Create(&event)
 
+	fmt.Println(event)
+
+	dayModel := models.Days{}
+	dayModel.EventID = event.EventID
+	dayModel.Day = days
+	db.Create(&dayModel)
+
 	fmt.Println(event.EventID)
 	fmt.Println(event.Memo)
 	fmt.Println(event.EventName)
@@ -36,5 +42,5 @@ func (ec EventController) EventCreate (c *gin.Context) {
 
 	defer db.Close()
 
-	c.HTML(http.StatusOK, "Schedule.tmpl", gin.H{"eventName": eventName, "memo": memo, "day": days})
+	c.HTML(http.StatusOK, "Schedule.tmpl", gin.H{"eventName": eventName, "memo": memo, "days": days})
 }

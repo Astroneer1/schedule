@@ -8,5 +8,6 @@ import (
 type UserController struct {}
 
 func (uc UserController) AddSchedule (c *gin.Context) {
+
 	c.HTML(http.StatusOK, "AddSchedule.tmpl", gin.H{})
 }
