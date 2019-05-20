@@ -63,7 +63,8 @@
                 </tr>
                 </tbody>
             </table>
-            <form method="POST" action="./AddSchedule">
+            <form method="GET" action="./AddSchedule">
+                <input type="hidden" name="eventId" value="{{.eventId}}">
                 <button type="submit" class="btn btn-primary">出欠を入力する</button>
             </form>
         </div>

@@ -27,11 +27,12 @@ func (ec EventController) EventCreate (c *gin.Context) {
 	event.EventName = eventName
 	event.Memo = memo
 	db.Create(&event)
+	eventId := event.EventID
 
 	fmt.Println(event)
 
 	dayModel := models.Days{}
-	dayModel.EventID = event.EventID
+	dayModel.EventID = eventId
 	dayModel.Day = days
 	db.Create(&dayModel)
 
@@ -42,5 +43,10 @@ func (ec EventController) EventCreate (c *gin.Context) {
 
 	defer db.Close()
 
-	c.HTML(http.StatusOK, "Schedule.tmpl", gin.H{"eventName": eventName, "memo": memo, "days": days})
+	c.HTML(http.StatusOK, "Schedule.tmpl",
+		gin.H{"eventId": eventId, "eventName": eventName, "memo": memo, "days": days})
+}
+
+func (ec EventController) EventUpdate(c *gin.Context) {
+	c.HTML(http.StatusOK, "AddSchedule.tmpl", gin.H{})
 }

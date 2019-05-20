@@ -16,7 +16,7 @@ func main() {
 
 	router.GET("/", eCtrl.EventIndex)
 	router.POST("/Event", eCtrl.EventCreate)
-	router.POST("/AddSchedule", uCtrl.AddSchedule)
+	router.GET("/AddSchedule", uCtrl.AddSchedule)
 	router.Run(":8080")
 }
 

@@ -36,13 +36,14 @@
         <h1 class="display-4">出欠を入力する</h1>
         <hr class="my-4">
         <form method="POST" action="./AddSchedule">
+            <input type="hidden" name="eventId" value="{{.eventId}}">
             <div class="form-group">
                 <label for="formGroupExampleInput">名前</label>
-                <input type="text" class="form-control" id="formGroupExampleInput">
+                <input type="text" class="form-control" id="formGroupExampleInput" name="name">
             </div>
             <div class="row">
                 <div class="col-2 text-truncate">
-                    {{.days}}
+                    {{.day}}
                 </div>
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-secondary active">
