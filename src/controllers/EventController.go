@@ -3,9 +3,9 @@ package controller
 import(
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 	_"github.com/jinzhu/gorm/dialects/mysql"
 	"net/http"
+	"project/Schedule/src/db"
 	"project/Schedule/src/models"
 )
 
@@ -17,7 +17,7 @@ func (ec EventController) EventIndex(c *gin.Context) {
 
 
 func (ec EventController) EventCreate (c *gin.Context) {
-	db,_ := gorm.Open("mysql", "root:mysql@/schedule?charset=utf8&parseTime=True&loc=Local")
+	dbConnection := db.GetConnection()
 
 	eventName := c.PostForm("eventName")
 	memo := c.PostForm("memo")
@@ -26,7 +26,7 @@ func (ec EventController) EventCreate (c *gin.Context) {
 	event := models.Event{}
 	event.EventName = eventName
 	event.Memo = memo
-	db.Create(&event)
+	dbConnection.Create(&event)
 	eventId := event.EventID
 
 	fmt.Println(event)
@@ -34,14 +34,14 @@ func (ec EventController) EventCreate (c *gin.Context) {
 	dayModel := models.Days{}
 	dayModel.EventID = eventId
 	dayModel.Day = days
-	db.Create(&dayModel)
+	dbConnection.Create(&dayModel)
 
 	fmt.Println(event.EventID)
 	fmt.Println(event.Memo)
 	fmt.Println(event.EventName)
 	fmt.Println(days)
 
-	defer db.Close()
+	db.CloseConnection(dbConnection)
 
 	c.HTML(http.StatusOK, "Schedule.tmpl",
 		gin.H{"eventId": eventId, "eventName": eventName, "memo": memo, "days": days})

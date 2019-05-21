@@ -1,22 +1,14 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	controller "project/Schedule/src/controllers"
+	"project/Schedule/src/common"
+	"project/Schedule/src/db"
+	"project/Schedule/src/server"
 )
 
-
 func main() {
-	router := gin.Default()
-	router.Static("/assets", "./assets")
-	router.LoadHTMLGlob("./templates/*.tmpl")
-
-	eCtrl := controller.EventController{}
-	uCtrl := controller.UserController{}
-
-	router.GET("/", eCtrl.EventIndex)
-	router.POST("/Event", eCtrl.EventCreate)
-	router.GET("/AddSchedule", uCtrl.AddSchedule)
-	router.Run(":8080")
+	common.Init()
+	db.Init()
+	server.Init()
 }
 

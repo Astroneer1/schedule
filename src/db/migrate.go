@@ -1,32 +1,31 @@
-package main
+package db
 
 import (
-	"github.com/jinzhu/gorm"
-	_"github.com/jinzhu/gorm/dialects/mysql"
 	"project/Schedule/src/models"
 )
 
-func gormConnect() *gorm.DB {
-	DBMS    := "mysql"
-	USER    := "root"
-	PASS    := "mysql"
-	PROTOCOL := "tcp(127.0.0.1:3306)"
-	DBNAME  := "schedule"
-
-	CONNECT := USER+":"+PASS+"@"+PROTOCOL+"/"+DBNAME
-	db,err := gorm.Open(DBMS, CONNECT)
-
-	if err != nil {
-		panic(err.Error())
-	}
-	return db
+func main(){
+	createTables()
 }
 
-func main(){
-	db := gormConnect()
+func createTables() {
+	db := GetConnection()
+
 	db.CreateTable(&models.Attendamce{})
 	db.CreateTable(&models.Days{})
 	db.CreateTable(&models.Event{})
 	db.CreateTable(&models.People{})
-	defer db.Close()
+
+	CloseConnection(db)
+}
+
+func deleteTables() {
+	db := GetConnection()
+
+	db.DropTable(&models.Attendamce{})
+	db.DropTable(&models.Days{})
+	db.DropTable(&models.Event{})
+	db.DropTable(&models.People{})
+
+	CloseConnection(db)
 }
