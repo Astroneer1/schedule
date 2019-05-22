@@ -14,7 +14,7 @@ func Init() {
 func router() (router *gin.Engine) {
 	router = gin.Default()
 	router.Static("/assets", "./assets")
-	router.LoadHTMLGlob("./templates/*.tmpl")
+	router.LoadHTMLGlob("src/templates/*.tmpl")
 
 	eCtrl := controller.EventController{}
 	aCtrl := controller.AttendanceController{}
