@@ -1,9 +1,9 @@
 package server
 
 import (
+	controller "Schedule/src/controllers"
 	"github.com/gin-gonic/gin"
 	"os"
-	controller "project/Schedule/src/controllers"
 )
 
 func Init() {
@@ -17,11 +17,11 @@ func router() (router *gin.Engine) {
 	router.LoadHTMLGlob("./templates/*.tmpl")
 
 	eCtrl := controller.EventController{}
-	uCtrl := controller.UserController{}
+	aCtrl := controller.AttendanceController{}
 
 	router.GET("/", eCtrl.EventIndex)
 	router.POST("/Event", eCtrl.EventCreate)
-	router.GET("/AddSchedule", uCtrl.AddSchedule)
+	router.GET("/Attendance", aCtrl.AttendanceIndex)
 
 	return
 }

@@ -1,14 +1,19 @@
 package main
 
 import (
-	"project/Schedule/src/common"
-	"project/Schedule/src/db"
-	"project/Schedule/src/server"
+	"Schedule/src/common"
+	"Schedule/src/db"
+	"Schedule/src/server"
 )
 
 func main() {
+	//env road
 	common.Init()
+
+	//db connect info road
 	db.Init()
+
+	//golang run
 	server.Init()
 }
 

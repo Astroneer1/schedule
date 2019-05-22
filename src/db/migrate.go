@@ -1,7 +1,7 @@
 package db
 
 import (
-	"project/Schedule/src/models"
+	"Schedule/src/models"
 )
 
 func main(){
