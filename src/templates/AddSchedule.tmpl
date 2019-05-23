@@ -35,25 +35,26 @@
     <div class="jumbotron">
         <h1 class="display-4">出欠を入力する</h1>
         <hr class="my-4">
-        <form method="POST" action="./AddSchedule">
+        <form method="POST" action="./Attendance">
             <input type="hidden" name="eventId" value="{{.eventId}}">
+            <input type="hidden" name="dayId" value="{{.dayId}}">
             <div class="form-group">
                 <label for="formGroupExampleInput">名前</label>
                 <input type="text" class="form-control" id="formGroupExampleInput" name="name">
             </div>
             <div class="row">
-                <div class="col-2 text-truncate">
+                <div class="col-2 text-truncate" >
                     {{.day}}
                 </div>
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-secondary active">
-                        <input type="radio" name="options" id="option1" autocomplete="off" checked>○
+                        <input type="radio" name="options" value="0" id="option1" autocomplete="off" checked>○
                     </label>
                     <label class="btn btn-secondary">
-                        <input type="radio" name="options" id="option2" autocomplete="off"> △
+                        <input type="radio" name="options" value="1" id="option2" autocomplete="off"> △
                     </label>
                     <label class="btn btn-secondary">
-                        <input type="radio" name="options" id="option3" autocomplete="off"> ×
+                        <input type="radio" name="options" value="2" id="option3" autocomplete="off"> ×
                     </label>
                 </div>
             </div>

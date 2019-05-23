@@ -1,7 +1,6 @@
 package db
 
 import (
-	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"os"
@@ -16,7 +15,6 @@ func Init() (db *gorm.DB) {
 	DBNAME   := os.Getenv("DB_NAME")
 
 	CONNECT := USER+":"+PASS+"@"+PROTOCOL+"/"+DBNAME
-	fmt.Println(CONNECT)
 	db,err := gorm.Open(DBMS, CONNECT)
 
 	if err != nil {

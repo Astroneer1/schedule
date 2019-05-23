@@ -1,12 +1,11 @@
 package controller
 
-import(
-	"fmt"
-	"github.com/gin-gonic/gin"
-	_"github.com/jinzhu/gorm/dialects/mysql"
-	"net/http"
+import (
 	"Schedule/src/db"
 	"Schedule/src/models"
+	"github.com/gin-gonic/gin"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"net/http"
 )
 
 type EventController struct{}
@@ -14,7 +13,6 @@ type EventController struct{}
 func (ec EventController) EventIndex(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.tmpl", gin.H{})
 }
-
 
 /*
 	Event作成
@@ -27,28 +25,22 @@ func (ec EventController) EventCreate (c *gin.Context) {
 	memo := c.PostForm("memo")
 	days := c.PostForm("days")
 
-	event := models.Event{}
-	event.EventName = eventName
-	event.Memo = memo
-	dbConnection.Create(&event)
-	eventId := event.EventID
-
-	fmt.Println(event)
+	eventModel := models.Event{}
+	eventModel.EventName = eventName
+	eventModel.Memo = memo
+	dbConnection.Create(&eventModel)
+	eventId := eventModel.EventID
 
 	dayModel := models.Days{}
 	dayModel.EventID = eventId
 	dayModel.Day = days
 	dbConnection.Create(&dayModel)
-
-	fmt.Println(event.EventID)
-	fmt.Println(event.Memo)
-	fmt.Println(event.EventName)
-	fmt.Println(days)
+	dayId := dayModel
 
 	db.CloseConnection(dbConnection)
 
 	c.HTML(http.StatusOK, "Schedule.tmpl",
-		gin.H{"eventId": eventId, "eventName": eventName, "memo": memo, "days": days})
+		gin.H{"eventId": eventId, "eventName": eventName, "memo": memo, "days": days, "dayId": dayId})
 }
 
 func (ec EventController) EventUpdate(c *gin.Context) {

@@ -13,7 +13,7 @@ func Init() {
 
 func router() (router *gin.Engine) {
 	router = gin.Default()
-	router.Static("/assets", "./assets")
+	router.Static("../assets", "src/assets")
 	router.LoadHTMLGlob("src/templates/*.tmpl")
 
 	eCtrl := controller.EventController{}
@@ -22,6 +22,7 @@ func router() (router *gin.Engine) {
 	router.GET("/", eCtrl.EventIndex)
 	router.POST("/Event", eCtrl.EventCreate)
 	router.GET("/Attendance", aCtrl.AttendanceIndex)
+	router.POST("/Attendance", aCtrl.AttendanceCreate)
 
 	return
 }
