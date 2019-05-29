@@ -19,10 +19,10 @@ func router() (router *gin.Engine) {
 	eCtrl := controller.EventController{}
 	aCtrl := controller.AttendanceController{}
 
-	router.GET("/", eCtrl.EventIndex)
-	router.POST("/Event", eCtrl.EventCreate)
-	router.GET("/Attendance", aCtrl.AttendanceIndex)
-	router.POST("/Attendance", aCtrl.AttendanceCreate)
+	router.GET("/", eCtrl.Index)
+	router.POST("/Event", eCtrl.Create)
+	router.GET("/Attendance", aCtrl.Index)
+	router.POST("/Attendance", aCtrl.Create)
 
 	return
 }

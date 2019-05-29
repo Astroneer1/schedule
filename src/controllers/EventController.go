@@ -8,9 +8,12 @@ import (
 	"net/http"
 )
 
-type EventController struct{}
+type EventController struct{
+	eventModel models.Event
+	dayModel models.Days
+}
 
-func (ec EventController) EventIndex(c *gin.Context) {
+func (ec EventController) Index(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.tmpl", gin.H{})
 }
 
@@ -18,24 +21,22 @@ func (ec EventController) EventIndex(c *gin.Context) {
 	Event作成
 　　　Eventsテーブル・Daysテーブルにインサート
  */
-func (ec EventController) EventCreate (c *gin.Context) {
+func (ec EventController) Create (c *gin.Context) {
 	dbConnection := db.GetConnection()
 
 	eventName := c.PostForm("eventName")
 	memo := c.PostForm("memo")
 	days := c.PostForm("days")
 
-	eventModel := models.Event{}
-	eventModel.EventName = eventName
-	eventModel.Memo = memo
-	dbConnection.Create(&eventModel)
-	eventId := eventModel.EventID
+	ec.eventModel.EventName = eventName
+	ec.eventModel.Memo = memo
+	dbConnection.Create(&ec.eventModel)
+	eventId := ec.eventModel.EventID
 
-	dayModel := models.Days{}
-	dayModel.EventID = eventId
-	dayModel.Day = days
-	dbConnection.Create(&dayModel)
-	dayId := dayModel
+	ec.dayModel.EventID = eventId
+	ec.dayModel.Day = days
+	dbConnection.Create(&ec.dayModel)
+	dayId := ec.dayModel.DayID
 
 	db.CloseConnection(dbConnection)
 
