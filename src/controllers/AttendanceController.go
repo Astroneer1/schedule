@@ -9,51 +9,47 @@ import (
 	"strconv"
 )
 
-type AttendanceController struct {
-	daysModel models.Days
-	eventModel models.Event
-	attendanceModel models.Attendamce
-	peopleModel models.People
-}
+type AttendanceController struct {}
 
 func (ac AttendanceController) Index (c *gin.Context) {
 	dbConnection := db.GetConnection()
 
-	dbConnection.Find(&ac.daysModel, "event_id=?", c.Query("eventId"))
+	daysModel := models.Days{}
+	dbConnection.Find(&daysModel, "event_id=?", c.Query("eventId"))
 
 	db.CloseConnection(dbConnection)
-	c.HTML(http.StatusOK, "AddSchedule.tmpl", gin.H{"eventId": ac.daysModel.EventID,"day": ac.daysModel.Day})
+	c.HTML(http.StatusOK, "AddSchedule.tmpl", gin.H{"eventId": daysModel.EventID,"day": daysModel.Day})
 }
 
 func (ac AttendanceController) Create (c *gin.Context) {
 	dbConnection := db.GetConnection()
 
-	eventId := c.PostForm("eventId")
-	name := c.PostForm("name")
-	comment := c.PostForm("comment")
+	peopleModel := models.People{
+		Name:    c.PostForm("name"),
+		Comment: c.PostForm("comment"),
+	}
 
-	ac.peopleModel.EventID,_ = strconv.Atoi(eventId)
-	ac.peopleModel.Name = name
-	ac.peopleModel.Comment = comment
-
-	dbConnection.Create(&ac.peopleModel)
+	peopleModel.EventID,_ = strconv.Atoi(c.PostForm("eventId"))
+	dbConnection.Create(&peopleModel)
 
 
-	peopleId := ac.peopleModel.PeopleID
-	attendance := c.PostForm("options")
-	dayId := c.PostForm("dayId")
+	attendanceModel := models.Attendamce{
+		PeopleID: peopleModel.PeopleID,
+	}
 
-	ac.attendanceModel.PeopleID = peopleId
-	ac.attendanceModel.Attendamce,_ = strconv.Atoi(attendance)
-	ac.attendanceModel.DayID,_ = strconv.Atoi(dayId)
+	attendanceModel.Attendamce,_ = strconv.Atoi(c.PostForm("options"))
+	attendanceModel.DayID,_ = strconv.Atoi(c.PostForm("dayId"))
 
-	dbConnection.Create(&ac.attendanceModel)
+	dbConnection.Create(&attendanceModel)
 
-	dbConnection.Find(&ac.daysModel, "event_Id=?", eventId)
-	dbConnection.Find(&ac.eventModel, "event_Id=?", eventId)
+	daysModel := models.Days{}
+	eventModel := models.Event{}
+
+	dbConnection.Find(&daysModel, "event_Id=?", peopleModel.EventID)
+	dbConnection.Find(&eventModel, "event_Id=?", peopleModel.EventID)
 
 	db.CloseConnection(dbConnection)
 
-	c.HTML(http.StatusOK, "Schedule.tmpl", gin.H{"eventId": eventId,
-			"eventName": ac.eventModel.EventName, "memo": ac.eventModel.Memo, "days": ac.daysModel.Day, "dayId": dayId})
+	c.HTML(http.StatusOK, "Schedule.tmpl", gin.H{"eventId": eventModel.EventID,
+			"eventName": eventModel.EventName, "memo": eventModel.Memo, "days": daysModel.Day, "dayId": daysModel.DayID})
 }

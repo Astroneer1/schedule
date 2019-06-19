@@ -8,10 +8,7 @@ import (
 	"net/http"
 )
 
-type EventController struct{
-	eventModel models.Event
-	dayModel models.Days
-}
+type EventController struct{}
 
 func (ec EventController) Index(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.tmpl", gin.H{})
@@ -24,24 +21,26 @@ func (ec EventController) Index(c *gin.Context) {
 func (ec EventController) Create (c *gin.Context) {
 	dbConnection := db.GetConnection()
 
-	eventName := c.PostForm("eventName")
-	memo := c.PostForm("memo")
-	days := c.PostForm("days")
+	eventModel := models.Event{
+		EventName: c.PostForm("eventName"),
+		Memo:c.PostForm("memo"),
+	}
 
-	ec.eventModel.EventName = eventName
-	ec.eventModel.Memo = memo
-	dbConnection.Create(&ec.eventModel)
-	eventId := ec.eventModel.EventID
+	dbConnection.Create(&eventModel)
 
-	ec.dayModel.EventID = eventId
-	ec.dayModel.Day = days
-	dbConnection.Create(&ec.dayModel)
-	dayId := ec.dayModel.DayID
+
+	dayModel := models.Days{
+		EventID: eventModel.EventID,
+		Day: c.PostForm("days"),
+	}
+
+	dbConnection.Create(&dayModel)
 
 	db.CloseConnection(dbConnection)
 
 	c.HTML(http.StatusOK, "Schedule.tmpl",
-		gin.H{"eventId": eventId, "eventName": eventName, "memo": memo, "days": days, "dayId": dayId})
+		gin.H{"eventId": eventModel.EventID, "eventName": eventModel.EventName,
+			"memo": eventModel.Memo, "days": dayModel.Day, "dayId": dayModel.DayID})
 }
 
 func (ec EventController) EventUpdate(c *gin.Context) {
